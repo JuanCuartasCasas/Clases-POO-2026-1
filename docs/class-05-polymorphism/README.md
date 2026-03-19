@@ -2,70 +2,75 @@
 
 ## What is Polymorphism?
 
-**Polymorphism** (Greek: *many forms*) allows objects of different classes to be treated as objects of a common superclass. The correct method is selected at runtime based on the actual type of the object.
+**Polymorphism** (Greek: *many forms*) allows objects of different classes to be treated uniformly through a common interface. The correct method is called based on the **actual type** of the object at runtime.
 
 ---
 
-## Types of Polymorphism in Java
+## Types of Polymorphism in Python
 
-### 1. Compile-time Polymorphism (Method Overloading)
+### 1. Duck Typing (Python's primary form)
 
-Multiple methods **share the same name** but differ in the number or type of parameters. Resolved at compile time.
+> "If it walks like a duck and quacks like a duck, it's a duck."
 
-```java
-public class MathUtils {
-    public int add(int a, int b)         { return a + b; }
-    public double add(double a, double b){ return a + b; }
-    public int add(int a, int b, int c)  { return a + b + c; }
-}
+Python does not check types at compile time. Any object that has the required method can be used:
+
+```python
+class Dog:
+    def speak(self): print("Woof!")
+
+class Cat:
+    def speak(self): print("Meow!")
+
+class Duck:
+    def speak(self): print("Quack!")
+
+animals = [Dog(), Cat(), Duck()]
+for a in animals:
+    a.speak()   # each responds differently — no shared base class needed
 ```
 
-### 2. Runtime Polymorphism (Method Overriding)
+### 2. Method Overriding (Runtime Polymorphism)
 
-A subclass provides a specific implementation of a method already defined in the superclass. Resolved at runtime via **dynamic dispatch**.
+Subclasses override a parent method; the right version is chosen at runtime:
 
-```java
-Animal a = new Dog("Rex", "Labrador");
-a.makeSound(); // calls Dog's makeSound(), not Animal's
+```python
+class Shape:
+    def area(self) -> float:
+        raise NotImplementedError
+
+class Circle(Shape):
+    def __init__(self, r): self.r = r
+    def area(self) -> float: return 3.14159 * self.r ** 2
+
+class Rectangle(Shape):
+    def __init__(self, w, h): self.w, self.h = w, h
+    def area(self) -> float: return self.w * self.h
 ```
 
----
+### 3. Operator Overloading (Compile-time Polymorphism equivalent)
 
-## Upcasting and Downcasting
+Define dunder methods to make operators work on your objects:
 
-```java
-Animal a = new Dog("Rex", "Labrador");  // upcasting (implicit)
-Dog d = (Dog) a;                        // downcasting (explicit)
-```
+```python
+class Vector:
+    def __init__(self, x, y): self.x, self.y = x, y
+    def __add__(self, other): return Vector(self.x + other.x, self.y + other.y)
+    def __str__(self):        return f"Vector({self.x}, {self.y})"
 
-Use `instanceof` before downcasting to avoid `ClassCastException`:
-
-```java
-if (a instanceof Dog dog) {
-    dog.bark();
-}
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+print(v1 + v2)   # Vector(4, 6)
 ```
 
 ---
 
 ## Polymorphic Collections
 
-```java
-List<Animal> animals = new ArrayList<>();
-animals.add(new Dog("Rex",   "Lab"));
-animals.add(new Cat("Whiskers"));
-animals.add(new Bird("Tweety"));
-
-for (Animal animal : animals) {
-    animal.makeSound(); // each responds differently
-}
+```python
+shapes: list[Shape] = [Circle(5), Rectangle(4, 6)]
+for s in shapes:
+    print(f"Area: {s.area():.2f}")   # correct method called for each type
 ```
-
----
-
-## Virtual Method Table (vtable)
-
-Java uses a **vtable** internally to dispatch method calls at runtime. Every class gets a vtable with pointers to the actual method implementations — that's how dynamic dispatch works.
 
 ---
 
@@ -79,4 +84,5 @@ Java uses a **vtable** internally to dispatch method calls at runtime. Every cla
 
 ## References
 
-- Liskov, B., & Wing, J. M. (1994). A behavioral notion of subtyping. *ACM TOPLAS*, 16(6), 1811–1841.
+- Lutz, M. (2013). *Learning Python* (5th ed.), Chapter 31. O'Reilly.
+

@@ -9,7 +9,7 @@ This section is a workspace for **reading, tracing, and explaining** existing co
 1. Open the snippet file for the exercise.
 2. Read it carefully **without running it**.
 3. Answer the questions in the exercise file.
-4. Run the code to verify your answers.
+4. Run the code to verify your answers (`python <exercise_file.py>`).
 
 ---
 
@@ -29,8 +29,8 @@ When adding a new analysis exercise, create a Markdown file with:
 ## Exercise N – Title
 
 ### Code
-\```java
-// code snippet here
+\```python
+# code snippet here
 \```
 
 ### Questions

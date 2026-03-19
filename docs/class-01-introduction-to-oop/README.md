@@ -22,27 +22,25 @@ OOP focuses on the objects that developers want to manipulate rather than the lo
 ## Key Concepts
 
 ### Class
-A **class** is a blueprint or template for creating objects. It defines a set of attributes (fields) and behaviours (methods) that the created objects will have.
+A **class** is a blueprint or template for creating objects. It defines a set of attributes (fields) and behaviours (methods).
 
-```java
-public class Animal {
-    String name;
-    int age;
+```python
+class Animal:
+    def __init__(self, name: str, age: int) -> None:
+        self.name = name
+        self.age  = age
 
-    void makeSound() {
-        System.out.println("...");
-    }
-}
+    def make_sound(self) -> None:
+        print("...")
 ```
 
 ### Object
 An **object** is an instance of a class. Every object has a **state** (stored in attributes) and **behaviour** (expressed through methods).
 
-```java
-Animal dog = new Animal();
-dog.name = "Rex";
-dog.age  = 3;
-dog.makeSound();
+```python
+dog = Animal("Rex", 3)
+dog.make_sound()
+print(dog.name)  # Rex
 ```
 
 ---
@@ -58,5 +56,6 @@ dog.makeSound();
 
 ## References
 
-- Bloch, J. (2018). *Effective Java* (3rd ed.). Addison-Wesley.
-- Oracle. (2024). *The Java Tutorials – Object-Oriented Programming Concepts*. https://docs.oracle.com/javase/tutorial/java/concepts/index.html
+- Lutz, M. (2013). *Learning Python* (5th ed.). O'Reilly.
+- Python Docs. (2024). *Classes*. https://docs.python.org/3/tutorial/classes.html
+

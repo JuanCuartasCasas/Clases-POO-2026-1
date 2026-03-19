@@ -20,4 +20,4 @@ Challenges are ordered by difficulty: ⭐ Easy → ⭐⭐ Medium → ⭐⭐⭐ H
 
 - Create your solution inside this folder: `challenge-NN-<name>/Solution.java`
 - Include a short comment at the top of each file explaining your approach.
-- Make sure your solution compiles: `javac Solution.java`
+- Make sure your solution runs: `python solution.py`

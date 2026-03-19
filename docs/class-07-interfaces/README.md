@@ -1,111 +1,109 @@
-# Class 07 – Interfaces
+# Class 07 – Protocols and Duck Typing
 
-## What is an Interface?
+## What is a Protocol?
 
-An **interface** is a completely abstract type that defines a **contract** — a set of method signatures that implementing classes must fulfil. It expresses a **"can-do"** or **"behaves-like"** relationship.
+In Python, a **Protocol** (from `typing`) is a way to define a **structural interface** — a contract that any class can satisfy simply by having the right methods and attributes, without explicitly inheriting from it.
+
+This is Python's equivalent of interfaces in Java/C#, but more flexible because it follows **duck typing**.
 
 ---
 
-## Declaring an Interface
+## Defining a Protocol
 
-```java
-public interface Drawable {
-    void draw();                    // abstract by default
-    default void printInfo() {      // default method (Java 8+)
-        System.out.println("I am drawable.");
-    }
-}
+```python
+from typing import Protocol
+
+class Drawable(Protocol):
+    def draw(self) -> None: ...
+```
+
+Any class that has a `draw(self) -> None` method automatically satisfies `Drawable`, even if it doesn't inherit from it.
+
+---
+
+## Implementing (Satisfying) a Protocol
+
+No explicit declaration needed:
+
+```python
+class Circle:
+    def draw(self) -> None:
+        print("Drawing a circle")
+
+class Square:
+    def draw(self) -> None:
+        print("Drawing a square")
+
+def render(shape: Drawable) -> None:
+    shape.draw()
+
+render(Circle())   # works
+render(Square())   # works
 ```
 
 ---
 
-## Implementing an Interface
+## `@runtime_checkable`
 
-A class uses the `implements` keyword. It must provide a body for every abstract method.
+Add this decorator to allow `isinstance()` checks at runtime:
 
-```java
-public class Rectangle implements Drawable {
-    private double width;
-    private double height;
+```python
+from typing import Protocol, runtime_checkable
 
-    public Rectangle(double width, double height) {
-        this.width  = width;
-        this.height = height;
-    }
+@runtime_checkable
+class Drawable(Protocol):
+    def draw(self) -> None: ...
 
-    @Override
-    public void draw() {
-        System.out.println("Drawing a rectangle " + width + " x " + height);
-    }
-}
+c = Circle()
+print(isinstance(c, Drawable))   # True
 ```
 
 ---
 
-## Multiple Interfaces
+## Multiple Protocols
 
-A class can implement **multiple interfaces** (unlike class inheritance in Java):
+A class can satisfy multiple protocols at once:
 
-```java
-public interface Resizable {
-    void resize(double factor);
-}
+```python
+class Resizable(Protocol):
+    def resize(self, factor: float) -> None: ...
 
-public class Circle implements Drawable, Resizable {
-    private double radius;
-
-    public Circle(double radius) { this.radius = radius; }
-
-    @Override
-    public void draw()                   { System.out.println("Drawing circle r=" + radius); }
-
-    @Override
-    public void resize(double factor)    { radius *= factor; }
-}
+class Circle:
+    def draw(self)              -> None: ...
+    def resize(self, factor)    -> None: ...
+    # Satisfies BOTH Drawable and Resizable
 ```
 
 ---
 
-## Interface vs Abstract Class (Quick Reference)
+## Duck Typing vs Protocol
 
-| Feature | Interface | Abstract Class |
-|---------|-----------|----------------|
-| Multiple inheritance | ✅ | ❌ |
-| Fields | `public static final` only | Any |
-| Constructors | ❌ | ✅ |
-| Default methods | ✅ (Java 8+) | ✅ |
-| Relationship | "can-do" | "is-a" |
+| Duck Typing | Protocol |
+|------------|---------|
+| No type hints | Uses `typing.Protocol` |
+| No static checking | Checked by mypy / Pyright |
+| Most Pythonic | More structured / explicit |
 
 ---
 
-## Functional Interfaces & Lambdas (Java 8+)
+## Callable as Functional Interface
 
-A **functional interface** has exactly one abstract method and can be used with lambda expressions.
+Python functions are first-class objects and can replace single-method interfaces:
 
-```java
-@FunctionalInterface
-public interface Validator {
-    boolean validate(String input);
-}
+```python
+# Instead of a Validator class/interface:
+not_empty: callable = lambda s: len(s) > 0
 
-Validator notEmpty = input -> !input.isEmpty();
-System.out.println(notEmpty.validate("hello")); // true
+def validate(value: str, validator) -> bool:
+    return validator(value)
+
+print(validate("hello", not_empty))   # True
 ```
-
----
-
-## Common Built-in Interfaces
-
-| Interface | Package | Purpose |
-|-----------|---------|---------|
-| `Comparable<T>` | `java.lang` | Natural ordering (`compareTo`) |
-| `Iterable<T>` | `java.lang` | For-each iteration |
-| `Runnable` | `java.lang` | Thread task |
-| `Serializable` | `java.io` | Object serialization marker |
-| `List<E>` | `java.util` | Ordered collection contract |
 
 ---
 
 ## References
 
-- Oracle. (2024). *Interfaces*. https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html
+- Python Docs. (2024). *typing.Protocol*. https://docs.python.org/3/library/typing.html#typing.Protocol
+- van Rossum, G. et al. (2015). *PEP 544 – Protocols: Structural subtyping*. https://peps.python.org/pep-0544/
+

@@ -6,92 +6,96 @@ A **class** is a user-defined data type. It acts as a blueprint from which indiv
 
 ### Anatomy of a Class
 
-```
-[access modifier] class ClassName {
-    // Fields (attributes / state)
-    // Constructors
-    // Methods (behaviour)
-}
+```python
+class ClassName:
+    # Class attribute (shared by all instances)
+    species = "unknown"
+
+    def __init__(self, param1, param2):   # constructor
+        self.param1 = param1              # instance attribute
+        self.param2 = param2
+
+    def some_method(self):               # behaviour
+        pass
 ```
 
 ### Example
 
-```java
-public class Car {
-    // Fields
-    private String brand;
-    private String model;
-    private int year;
+```python
+class Car:
+    def __init__(self, brand: str, model: str, year: int) -> None:
+        self.brand = brand
+        self.model = model
+        self.year  = year
 
-    // Constructor
-    public Car(String brand, String model, int year) {
-        this.brand = brand;
-        this.model = model;
-        this.year  = year;
-    }
-
-    // Method
-    public void displayInfo() {
-        System.out.println(year + " " + brand + " " + model);
-    }
-}
+    def display_info(self) -> None:
+        print(f"{self.year} {self.brand} {self.model}")
 ```
 
 ---
 
 ## Objects
 
-An **object** is a runtime instance of a class created with the `new` keyword.
+An **object** is a runtime instance of a class created by calling it like a function.
 
-```java
-Car myCar = new Car("Toyota", "Corolla", 2024);
-myCar.displayInfo(); // Output: 2024 Toyota Corolla
+```python
+my_car = Car("Toyota", "Corolla", 2024)
+my_car.display_info()   # 2024 Toyota Corolla
 ```
 
 ### Object Identity vs Equality
 
 | Concept | Operator / Method | Checks |
 |---------|-------------------|--------|
-| Identity | `==` | Same memory reference |
-| Equality | `.equals()` | Logically the same content |
+| Identity | `is` | Same object in memory |
+| Equality | `==` | Same value (uses `__eq__`) |
 
 ---
 
-## Constructors
+## `__init__` (Constructor)
 
-A **constructor** is a special method called when an object is instantiated. It has the same name as the class and no return type.
+`__init__` is called automatically when a new object is created. Use it to set up instance attributes.
 
-```java
-// Default (no-argument) constructor
-public Car() {
-    this.brand = "Unknown";
-    this.model = "Unknown";
-    this.year  = 0;
-}
-
-// Parameterised constructor
-public Car(String brand, String model, int year) { ... }
+```python
+class Car:
+    def __init__(self, brand="Unknown", model="Unknown", year=0):
+        self.brand = brand
+        self.model = model
+        self.year  = year
 ```
 
 ---
 
-## The `this` Keyword
+## `self`
 
-`this` refers to the current object instance. It is commonly used to:
-- Distinguish between instance fields and constructor/method parameters with the same name.
-- Call another constructor within the same class (`this(...)`).
+`self` refers to the current object instance. It must be the **first parameter** of every instance method, though you never pass it explicitly when calling.
 
 ---
 
-## Memory Layout
+## Special (Dunder) Methods
 
-| Area | Stores |
-|------|--------|
-| **Stack** | Local variables, method calls, references |
-| **Heap** | Actual object data allocated with `new` |
+| Method | Purpose |
+|--------|---------|
+| `__init__` | Constructor |
+| `__str__` | Human-readable string (`print(obj)`) |
+| `__repr__` | Developer-readable string |
+| `__eq__` | Equality comparison (`==`) |
+
+```python
+def __str__(self) -> str:
+    return f"{self.year} {self.brand} {self.model}"
+```
+
+---
+
+## Memory
+
+- All objects live on the **heap**.
+- Variables hold **references** (pointers) to objects, not the objects themselves.
 
 ---
 
 ## References
 
-- Sierra, K., & Bates, B. (2005). *Head First Java* (2nd ed.). O'Reilly.
+- Lutz, M. (2013). *Learning Python* (5th ed.), Chapter 27. O'Reilly.
+

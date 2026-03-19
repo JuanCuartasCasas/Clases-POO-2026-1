@@ -2,7 +2,7 @@
 
 ## What is Inheritance?
 
-**Inheritance** is the mechanism by which one class (child / subclass) acquires the fields and methods of another class (parent / superclass). It promotes **code reuse** and establishes an **"is-a"** relationship.
+**Inheritance** is the mechanism by which one class (child / subclass) acquires the attributes and methods of another class (parent / superclass). It promotes **code reuse** and establishes an **"is-a"** relationship.
 
 ```
 Animal  ←  Dog
@@ -13,95 +13,103 @@ Animal  ←  Cat
 
 ---
 
-## Syntax in Java
+## Syntax in Python
 
-```java
-// Parent class
-public class Animal {
-    protected String name;
+```python
+# Parent class
+class Animal:
+    def __init__(self, name: str, age: int) -> None:
+        self.name = name
+        self.age  = age
 
-    public Animal(String name) {
-        this.name = name;
-    }
+    def eat(self) -> None:
+        print(f"{self.name} is eating.")
 
-    public void eat() {
-        System.out.println(name + " is eating.");
-    }
-}
 
-// Child class
-public class Dog extends Animal {
-    private String breed;
+# Child class
+class Dog(Animal):
+    def __init__(self, name: str, age: int, breed: str) -> None:
+        super().__init__(name, age)   # call parent __init__
+        self.breed = breed
 
-    public Dog(String name, String breed) {
-        super(name);          // calls Animal constructor
-        this.breed = breed;
-    }
-
-    public void bark() {
-        System.out.println(name + " says: Woof!");
-    }
-}
+    def bark(self) -> None:
+        print(f"{self.name} says: Woof!")
 ```
 
 ---
 
-## The `super` Keyword
+## `super()`
 
-| Usage | Purpose |
-|-------|---------|
-| `super(args)` | Calls the parent constructor (must be first statement) |
-| `super.method()` | Calls an overridden method from the parent |
+`super()` returns a proxy object that delegates method calls to the parent class. The most common use is calling the parent constructor:
+
+```python
+super().__init__(name, age)
+```
 
 ---
 
 ## Method Overriding
 
-A subclass can **override** a parent method to provide a specialised implementation. Use `@Override` annotation for compiler validation.
+A subclass can **override** a parent method to provide a specialised implementation:
 
-```java
-public class Cat extends Animal {
-    public Cat(String name) { super(name); }
+```python
+class Cat(Animal):
+    def eat(self) -> None:       # overrides Animal.eat
+        print(f"{self.name} eats very delicately.")
+```
 
-    @Override
-    public void eat() {
-        System.out.println(name + " eats delicately.");
-    }
-}
+To extend (not replace) the parent behaviour, call `super()`:
+
+```python
+class Dog(Animal):
+    def eat(self) -> None:
+        super().eat()            # run Animal.eat first
+        print(f"{self.name} wags its tail.")
 ```
 
 ---
 
-## Types of Inheritance (Java)
+## Types of Inheritance (Python)
 
-| Type | Supported in Java? |
-|------|--------------------|
+| Type | Supported? |
+|------|------------|
 | Single | ✅ |
 | Multilevel | ✅ |
 | Hierarchical | ✅ |
-| Multiple (classes) | ❌ (use interfaces) |
+| Multiple | ✅ (via MRO – Method Resolution Order) |
+
+```python
+class A: ...
+class B(A): ...
+class C(A): ...
+class D(B, C): ...   # multiple inheritance — Python uses C3 linearisation
+```
 
 ---
 
-## `final` Classes and Methods
+## `isinstance()` and `issubclass()`
 
-- `final class` – Cannot be extended.
-- `final method` – Cannot be overridden.
+```python
+dog = Dog("Rex", 3, "Labrador")
+isinstance(dog, Dog)     # True
+isinstance(dog, Animal)  # True  — inheritance chain
+issubclass(Dog, Animal)  # True
+```
 
 ---
 
 ## Composition vs. Inheritance
 
-> **Favour composition over inheritance** (Effective Java, Item 18).
+> **Favour composition over inheritance** when the relationship is "has-a", not "is-a".
 
 | Inheritance | Composition |
 |-------------|-------------|
-| "is-a" relationship | "has-a" relationship |
+| "is-a" | "has-a" |
 | Tight coupling | Loose coupling |
-| Harder to change | Easier to change |
 
 ---
 
 ## References
 
-- Bloch, J. (2018). *Effective Java* (3rd ed.), Item 18. Addison-Wesley.
+- Python Docs. (2024). *Inheritance*. https://docs.python.org/3/tutorial/classes.html#inheritance
+

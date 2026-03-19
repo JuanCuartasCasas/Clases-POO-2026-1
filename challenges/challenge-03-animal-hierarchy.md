@@ -2,7 +2,7 @@
 
 ## Description
 
-Build an **animal classification hierarchy** that demonstrates inheritance, method overriding, and polymorphism.
+Build an **animal classification hierarchy** that demonstrates inheritance, method overriding, and polymorphism in Python.
 
 ---
 
@@ -12,46 +12,49 @@ Build an **animal classification hierarchy** that demonstrates inheritance, meth
 
 | Member | Details |
 |--------|---------|
-| `name` | `String` |
+| `name` | `str` |
 | `age` | `int` |
-| `makeSound()` | **Abstract** – each animal sounds different |
+| `make_sound()` | **Abstract** – each animal sounds different |
 | `move()` | **Abstract** – each animal moves differently |
-| `eat(String food)` | Concrete – prints `"<name> eats <food>"` |
-| `describe()` | Concrete – prints full info using `makeSound()` and `move()` |
+| `eat(food)` | Concrete – prints `"<name> eats <food>"` |
+| `describe()` | Concrete – prints full info using `make_sound()` and `move()` |
+
+Use `from abc import ABC, abstractmethod`.
 
 ### Concrete Classes
 
 Implement at least **4 animals**: `Dog`, `Cat`, `Eagle`, `Fish`.
 
-Each must override `makeSound()` and `move()` with realistic behaviour.
+Each must override `make_sound()` and `move()` with realistic behaviour.
 
-### Interface: `Trainable`
+### Protocol / Mixin: `Trainable`
 
-```java
-interface Trainable {
-    void train(String command);
-    boolean canLearnTrick(String trick);
-}
+```python
+class Trainable:
+    def train(self, command: str) -> None: ...
+    def can_learn_trick(self, trick: str) -> bool: ...
 ```
 
-`Dog` and `Eagle` should implement `Trainable`.
+`Dog` and `Eagle` should inherit from `Trainable` (multiple inheritance).
 
 ### Class: `AnimalShelter`
 
-- Maintains a `List<Animal>`.
-- `admit(Animal a)` – adds an animal.
-- `describeAll()` – calls `describe()` on every animal.
-- `getTrainableAnimals()` – returns a filtered list of `Trainable` animals.
+| Member | Details |
+|--------|---------|
+| `__animals` | `list[Animal]`, private |
+| `admit(animal)` | Adds an animal |
+| `describe_all()` | Calls `describe()` on every animal |
+| `get_trainable_animals()` | Returns filtered list of `Trainable` animals |
 
 ---
 
 ## Expected Output (Example)
 
 ```
-Rex (Dog, 3) | Sound: Woof! | Move: Runs on four legs
-Whiskers (Cat, 5) | Sound: Meow | Move: Walks gracefully
-Sky (Eagle, 2) | Sound: Screech! | Move: Soars through the sky
-Nemo (Fish, 1) | Sound: ... | Move: Swims with fins
+Rex (Dog, 3)      | Sound: Woof!    | Move: Runs on four legs
+Whiskers (Cat, 5) | Sound: Meow     | Move: Walks gracefully
+Sky (Eagle, 2)    | Sound: Screech! | Move: Soars through the sky
+Nemo (Fish, 1)    | Sound: ...      | Move: Swims with fins
 
 Trainable animals: Rex, Sky
 ```
@@ -60,6 +63,8 @@ Trainable animals: Rex, Sky
 
 ## Hints
 
-- Use `instanceof` or `getTrainableAnimals()` to filter trainable animals.
-- Override `toString()` in each class for clean output.
-- Consider using a `for-each` loop with polymorphism for `describeAll()`.
+- Use `isinstance(animal, Trainable)` to filter trainable animals.
+- Multiple inheritance syntax: `class Dog(Animal, Trainable):`.
+- Override `__str__` in each class for clean output.
+- Use a list comprehension in `get_trainable_animals()`.
+

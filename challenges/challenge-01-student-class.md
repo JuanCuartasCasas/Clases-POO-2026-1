@@ -2,7 +2,7 @@
 
 ## Description
 
-Create a class that models a **university student**.
+Create a class that models a **university student** in Python.
 
 ---
 
@@ -12,17 +12,17 @@ Create a class that models a **university student**.
 
 | Member | Type | Details |
 |--------|------|---------|
-| `studentId` | `String` | Unique identifier, e.g. `"2026-001"` |
-| `firstName` | `String` | Student's first name |
-| `lastName` | `String` | Student's last name |
-| `gpa` | `double` | Grade Point Average, range 0.0 – 5.0 |
-| `Student(id, firstName, lastName)` | Constructor | GPA starts at 0.0 |
-| `getFullName()` | Method | Returns `"FirstName LastName"` |
-| `recordGrade(double grade)` | Method | Adds a grade and recalculates GPA (simple average) |
-| `isHonorRoll()` | Method | Returns `true` if GPA ≥ 4.5 |
-| `toString()` | Method | Readable summary |
+| `student_id` | `str` | Unique identifier, e.g. `"2026-001"` |
+| `first_name` | `str` | Student's first name |
+| `last_name` | `str` | Student's last name |
+| `__grades` | `list[float]` | Private — grades recorded so far |
+| `full_name` | property | Returns `"FirstName LastName"` |
+| `gpa` | property | Average of all recorded grades (0.0 if none) |
+| `record_grade(grade)` | method | Validates range [0.0, 5.0] then appends |
+| `is_honor_roll()` | method | Returns `True` if `gpa >= 4.5` |
+| `__str__` | dunder | Readable summary |
 
-### Class: `Main`
+### Script
 
 Create at least **3 student objects**, record several grades for each, and print their information.
 
@@ -31,15 +31,17 @@ Create at least **3 student objects**, record several grades for each, and print
 ## Expected Output (Example)
 
 ```
-Student[id=2026-001, name=Alice Smith, gpa=4.80] -> Honor Roll: true
-Student[id=2026-002, name=Bob Johnson, gpa=3.60] -> Honor Roll: false
-Student[id=2026-003, name=Carol White, gpa=4.50] -> Honor Roll: true
+Student[id=2026-001, name=Alice Smith, gpa=4.80] -> Honor Roll: True
+Student[id=2026-002, name=Bob Johnson, gpa=3.60] -> Honor Roll: False
+Student[id=2026-003, name=Carol White, gpa=4.50] -> Honor Roll: True
 ```
 
 ---
 
 ## Hints
 
-- Use a `List<Double>` or running sum + count to calculate the GPA.
-- Apply encapsulation: keep fields `private`.
-- Validate that grades are in range [0.0, 5.0] before recording.
+- Use a private list `self.__grades = []` to store grades.
+- The `gpa` property computes `sum(self.__grades) / len(self.__grades)`.
+- Validate that grades are in the range [0.0, 5.0] before appending.
+- Use `@property` instead of explicit getter methods.
+

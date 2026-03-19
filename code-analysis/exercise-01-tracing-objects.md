@@ -2,42 +2,38 @@
 
 ## Code
 
-```java
-public class TracingExercise {
+```python
+class Counter:
+    def __init__(self, initial: int) -> None:
+        self.__count = initial
 
-    static class Counter {
-        private int count;
+    def increment(self) -> None:
+        self.__count += 1
 
-        Counter(int initial) {
-            this.count = initial;
-        }
+    def decrement(self) -> None:
+        self.__count -= 1
 
-        void increment() { count++; }
-        void decrement() { count--; }
-        int  getCount()  { return count; }
+    def get_count(self) -> int:
+        return self.__count
 
-        @Override
-        public String toString() {
-            return "Counter(" + count + ")";
-        }
-    }
+    def __str__(self) -> str:
+        return f"Counter({self.__count})"
 
-    public static void main(String[] args) {
-        Counter a = new Counter(0);
-        Counter b = new Counter(10);
-        Counter c = a;            // (*)
 
-        a.increment();
-        a.increment();
-        b.decrement();
-        c.increment();            // (**)
+if __name__ == "__main__":
+    a = Counter(0)
+    b = Counter(10)
+    c = a              # (*)
 
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
-        System.out.println(a == c);
-    }
-}
+    a.increment()
+    a.increment()
+    b.decrement()
+    c.increment()      # (**)
+
+    print(a)
+    print(b)
+    print(c)
+    print(a is c)
 ```
 
 ---
@@ -47,10 +43,10 @@ public class TracingExercise {
 Answer **before** running the code.
 
 1. How many `Counter` objects are created in this program?
-2. What is the output of `System.out.println(a)` after all operations?
-3. What is the output of `System.out.println(b)` after all operations?
-4. After line `(**)`, does `a.getCount()` equal `c.getCount()`? Why?
-5. What does `a == c` print? What does this tell us about object references?
+2. What does `print(a)` output after all operations?
+3. What does `print(b)` output after all operations?
+4. After line `(**)`, does `a.get_count()` equal `c.get_count()`? Why?
+5. What does `a is c` print? What does this tell you about object references in Python?
 
 ---
 
@@ -68,6 +64,8 @@ Answer **before** running the code.
 
 ## Key Takeaways
 
-- `Counter c = a;` does **not** create a new object — it copies the **reference**.
-- Any mutation through `c` is visible via `a` (and vice versa) because they point to the same heap object.
-- `==` compares **references**, not content.
+- `c = a` does **not** create a new object — it copies the **reference** (both names point to the same object).
+- Any mutation through `c` is visible via `a` (and vice versa).
+- `is` checks **identity** (same object in memory), not equality of value.
+- `==` checks **equality** (value), which uses `__eq__` (falls back to identity if not defined).
+
